@@ -4,10 +4,18 @@
         <li class="<?php if (isset($menuPainel)) {
     echo 'active';
 }; ?>"><a href="<?= base_url() ?>"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+        
+        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vAquisicao')) { ?>
+            <li class="<?php if (isset($menuClientes)) {
+            echo 'active';
+        }; ?>"><a href="<?= site_url('aquisicoes') ?>"><i class="fas fa-users"></i> <span>Aquisições</span></a></li>
+            <?php
+        } ?>
+
         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) { ?>
             <li class="<?php if (isset($menuClientes)) {
-    echo 'active';
-}; ?>"><a href="<?= site_url('clientes') ?>"><i class="fas fa-users"></i> <span>Cliente / Fornecedor</span></a></li>
+            echo 'active';
+        }; ?>"><a href="<?= site_url('clientes') ?>"><i class="fas fa-users"></i> <span>Cliente / Fornecedor</span></a></li>
             <?php
         } ?>
         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) { ?>
