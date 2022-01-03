@@ -6,7 +6,7 @@
 }; ?>"><a href="<?= base_url() ?>"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
         
         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vAquisicao')) { ?>
-            <li class="<?php if (isset($menuClientes)) {
+            <li class="<?php if (isset($menuAquisicoes)) {
             echo 'active';
         }; ?>"><a href="<?= site_url('aquisicoes') ?>"><i class="fas fa-users"></i> <span>Aquisições</span></a></li>
             <?php

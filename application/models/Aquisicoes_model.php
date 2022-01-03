@@ -18,7 +18,7 @@ class Aquisicoes_model extends CI_Model
     {
         $this->db->select($fields);
         $this->db->from($table);
-        $this->db->order_by('idAquisicoes', 'desc');
+        $this->db->order_by('id_aquisicao', 'desc');
         $this->db->limit($perpage, $start);
         if ($where) {
             $this->db->where($where);
@@ -32,7 +32,7 @@ class Aquisicoes_model extends CI_Model
 
     public function getById($id)
     {
-        $this->db->where('idAquisicoes', $id);
+        $this->db->where('id_aquisicao', $id);
         $this->db->limit(1);
         return $this->db->get('aquisicoes')->row();
     }
@@ -77,7 +77,21 @@ class Aquisicoes_model extends CI_Model
 
     public function updateEstoque($produto, $quantidade, $operacao = '-')
     {
-        $sql = "UPDATE aquisicao set estoque = estoque $operacao ? WHERE idAquisicoes = ?";
+        $sql = "UPDATE aquisicao set estoque = estoque $operacao ? WHERE id_aquisicao = ?";
         return $this->db->query($sql, [$quantidade, $produto]);
+    }
+
+    public function autoCompleteModelo($q)
+    {
+        $this->db->select('*');
+        $this->db->limit(5);
+        $this->db->like('descricao', $q);
+        $query = $this->db->get('modelos');
+        if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $row) {
+                $row_set[] = ['label' => $row['descricao'], 'id' => $row['id_modelo']];
+            }
+            echo json_encode($row_set);
+        }
     }
 }

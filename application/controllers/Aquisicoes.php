@@ -6,8 +6,8 @@ class Aquisicoes extends MY_Controller
 {
 
     /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
+     * author: Elcio Silva
+     * email: elciospy@gmail.com
      *
      */
 
@@ -82,7 +82,7 @@ class Aquisicoes extends MY_Controller
                 $this->data['custom_error'] = '<div class="form_error"><p>An Error Occured.</p></div>';
             }
         }
-        $this->data['view'] = 'aquisicoes/adicionarProduto';
+        $this->data['view'] = 'aquisicoes/adicionarAquisicao';
         return $this->layout();
     }
 
@@ -119,10 +119,10 @@ class Aquisicoes extends MY_Controller
                 'entrada' => set_value('entrada'),
             ];
 
-            if ($this->aquisicoes_model->edit('aquisicoes', $data, 'idAquisicoes', $this->input->post('idAquisicoes')) == true) {
+            if ($this->aquisicoes_model->edit('aquisicoes', $data, 'id_aquisicao', $this->input->post('id_aquisicao')) == true) {
                 $this->session->set_flashdata('success', 'Produto editado com sucesso!');
-                log_info('Alterou um produto. ID: ' . $this->input->post('idAquisicoes'));
-                redirect(site_url('aquisicoes/editar/') . $this->input->post('idAquisicoes'));
+                log_info('Alterou um produto. ID: ' . $this->input->post('id_aquisicao'));
+                redirect(site_url('aquisicoes/editar/') . $this->input->post('id_aquisicao'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>An Error Occured</p></div>';
             }
@@ -150,7 +150,7 @@ class Aquisicoes extends MY_Controller
 
         if ($this->data['result'] == null) {
             $this->session->set_flashdata('error', 'Produto não encontrado.');
-            redirect(site_url('aquisicoes/editar/') . $this->input->post('idAquisicoes'));
+            redirect(site_url('aquisicoes/editar/') . $this->input->post('id_aquisicao'));
         }
 
         $this->data['view'] = 'aquisicoes/visualizarProduto';
@@ -172,7 +172,7 @@ class Aquisicoes extends MY_Controller
 
         $this->aquisicoes_model->delete('aquisicoes_os', 'aquisicoes_id', $id);
         $this->aquisicoes_model->delete('itens_de_vendas', 'aquisicoes_id', $id);
-        $this->aquisicoes_model->delete('aquisicoes', 'idAquisicoes', $id);
+        $this->aquisicoes_model->delete('aquisicoes', 'id_aquisicao', $id);
 
         log_info('Removeu um produto. ID: ' . $id);
 
@@ -197,12 +197,20 @@ class Aquisicoes extends MY_Controller
             'estoque' => $estoque,
         ];
 
-        if ($this->aquisicoes_model->edit('aquisicoes', $data, 'idAquisicoes', $idProduto) == true) {
+        if ($this->aquisicoes_model->edit('aquisicoes', $data, 'id_aquisicao', $idProduto) == true) {
             $this->session->set_flashdata('success', 'Estoque de Produto atualizado com sucesso!');
             log_info('Atualizou estoque de um produto. ID: ' . $idProduto);
             redirect(site_url('aquisicoes/visualizar/') . $idProduto);
         } else {
             $this->data['custom_error'] = '<div class="alert">Ocorreu um erro.</div>';
+        }
+    }
+
+    public function autoCompleteModelo()
+    {
+        if (isset($_GET['term'])) {
+            $q = strtolower($_GET['term']);
+            $this->aquisicoes_model->autoCompleteModelo($q);
         }
     }
 }

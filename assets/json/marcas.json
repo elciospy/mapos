@@ -1,0 +1,12 @@
+{
+  "marcas": [
+    {
+      "idMarcas": "1",
+      "marca": "DELL"
+    },
+    {
+      "idMarcas": "2",
+      "marca": "HP"
+    }
+  ]
+}

@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+
 <style>
     /* Hiding the checkbox, but allowing it to be focused */
     .badgebox {
@@ -32,23 +35,30 @@
                 <span class="icon">
                     <i class="fas fa-shopping-bag"></i>
                 </span>
-                <h5>Cadastro de Produto</h5>
+                <h5>Cadastro de Aquisição</h5>
             </div>
             <div class="widget-content nopadding tab-content">
                 <?php echo $custom_error; ?>
                 <form action="<?php echo current_url(); ?>" id="formProduto" method="post" class="form-horizontal">
                     <div class="control-group">
-                        <label for="codDeBarra" class="control-label">Código de Barra<span class=""></span></label>
+                        <label for="tipo" class="control-label">Tipo<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="codDeBarra" type="text" name="codDeBarra" value="<?php echo set_value('codDeBarra'); ?>" />
+                            <select id="tipo" name="tipo"></select>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="descricao" class="control-label">Descrição<span class="required">*</span></label>
+                        <label for="marca" class="control-label">Marca<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="descricao" type="text" name="descricao" value="<?php echo set_value('descricao'); ?>" />
+                            <select id="marca" name="marca"></select>
                         </div>
                     </div>
+                    <div class="control-group">
+                        <label for="modelo" class="control-label">Modelo<span class="required">*</span></label>
+                        <div class="controls">
+                        <input id="modelo" class="span6" type="text" name="modelo" value="" />
+                        <input id="modelos_id" class="span12" type="hidden" name="modelos_id" value="" />
+                        </div>
+                    </div>                    
                     <div class="control-group">
                         <label class="control-label">Tipo de Movimento</label>
                         <div class="controls">
@@ -61,19 +71,11 @@
                                 <span class="badge">&check;</span>
                             </label>
                         </div>
-                    </div>
+                    </div>                    
                     <div class="control-group">
                         <label for="precoCompra" class="control-label">Preço de Compra<span class="required">*</span></label>
                         <div class="controls">
                             <input style="width: 9em;" id="precoCompra" class="money" data-affixes-stay="true" data-thousands="" data-decimal="." type="text" name="precoCompra" value="<?php echo set_value('precoCompra'); ?>" />
-                            Margem <input style="width: 3em;" id="margemLucro" name="margemLucro" type="text" placeholder="%" maxlength="3" size="2" />
-                            <strong><span style="color: red" id="errorAlert"></span><strong>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label for="precoVenda" class="control-label">Preço de Venda<span class="required">*</span></label>
-                        <div class="controls">
-                            <input id="precoVenda" class="money" data-affixes-stay="true" data-thousands="" data-decimal="." type="text" name="precoVenda" value="<?php echo set_value('precoVenda'); ?>" />
                         </div>
                     </div>
                     <div class="control-group">
@@ -111,67 +113,40 @@
 <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
-    function calcLucro(precoCompra, margemLucro) {
-        var precoVenda = (precoCompra * margemLucro / 100 + precoCompra).toFixed(2);
-        return precoVenda;
-    }
-    $("#precoCompra").focusout(function() {
-        if ($("#precoCompra").val() == '0.00' && $('#precoVenda').val() != '') {
-            $('#errorAlert').text('Você não pode preencher valor de compra e depois apagar.').css("display", "inline").fadeOut(6000);
-            $('#precoVenda').val('');
-            $("#precoCompra").focus();
-        } else {
-            $('#precoVenda').val(calcLucro(Number($("#precoCompra").val()), Number($("#margemLucro").val())));
-        }
-    });
-
-    $("#margemLucro").keyup(function() {
-        this.value = this.value.replace(/[^0-9.]/g, '');
-        if ($("#precoCompra").val() == null || $("#precoCompra").val() == '') {
-            $('#errorAlert').text('Preencher valor da compra primeiro.').css("display", "inline").fadeOut(5000);
-            $('#margemLucro').val('');
-            $('#precoVenda').val('');
-            $("#precoCompra").focus();
-
-        } else if (Number($("#margemLucro").val()) >= 0) {
-            $('#precoVenda').val(calcLucro(Number($("#precoCompra").val()), Number($("#margemLucro").val())));
-        } else {
-            $('#errorAlert').text('Não é permitido número negativo.').css("display", "inline").fadeOut(5000);
-            $('#margemLucro').val('');
-            $('#precoVenda').val('');
-        }
-    });
-
-    $('#precoVenda').focusout(function () {
-        if (Number($('#precoVenda').val()) < Number($("#precoCompra").val())) {
-            $('#errorAlert').text('Preço de venda não pode ser menor que o preço de compra.').css("display", "inline").fadeOut(6000);
-            $('#precoVenda').val('');
-            if ($("#margemLucro").val() != "" || $("#margemLucro").val() != null) {
-                $('#precoVenda').val(calcLucro(Number($("#precoCompra").val()), Number($("#margemLucro").val())));
-            }
-        }
-
-    });
-
     $(document).ready(function() {
         $(".money").maskMoney();
+        $.getJSON('<?php echo base_url() ?>assets/json/tipo_aquisicao.json', function(data) {
+            for (i in data.aquisicoes) {
+                $('#tipo').append(new Option(data.aquisicoes[i].descricao, data.aquisicoes[i].sigla));
+            }
+        });
+        $("#modelo").autocomplete({
+            source: "<?php echo base_url(); ?>index.php/aquisicoes/autoCompleteModelo",
+            minLength: 1,
+            select: function(event, ui) {
+                $("#modelos_id").val(ui.item.id);
+            }
+        });
         $.getJSON('<?php echo base_url() ?>assets/json/tabela_medidas.json', function(data) {
             for (i in data.medidas) {
                 $('#unidade').append(new Option(data.medidas[i].descricao, data.medidas[i].sigla));
             }
         });
+
+        $.getJSON('<?php echo base_url() ?>assets/json/marcas.json', function(data) {
+            for (i in data.marcas) {
+                $('#marca').append(new Option(data.marcas[i].marca, data.marcas[i].idMarcas));
+            }
+        });
         $('#formProduto').validate({
             rules: {
-                descricao: {
+                modelo: {
                     required: true
                 },
                 unidade: {
                     required: true
                 },
                 precoCompra: {
-                    required: true
-                },
-                precoVenda: {
                     required: true
                 },
                 estoque: {
@@ -179,16 +154,13 @@
                 }
             },
             messages: {
-                descricao: {
+                modelo: {
                     required: 'Campo Requerido.'
                 },
                 unidade: {
                     required: 'Campo Requerido.'
                 },
                 precoCompra: {
-                    required: 'Campo Requerido.'
-                },
-                precoVenda: {
                     required: 'Campo Requerido.'
                 },
                 estoque: {

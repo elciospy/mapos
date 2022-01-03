@@ -1,0 +1,14 @@
+{
+  "aquisicoes": [
+    {
+      "id": "23",
+      "descricao": "NOTEBOOK",
+      "sigla": "NOTEBOOK"
+    },
+    {
+      "id": "25",
+      "descricao": "PC GAMER",
+      "sigla": "PC GAMER"
+    }
+  ]
+}
