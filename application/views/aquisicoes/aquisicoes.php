@@ -14,11 +14,12 @@
     <div class="widget-content nopadding tab-content">
         <table id="tabela" class="table table-bordered ">
             <thead>
-            <tr style="backgroud-color: #2D335B">
+            <tr style="background-color: #2D335B">
                 <th>Cod. Produto</th>
-                <th>Nome</th>
-                <th>Estoque</th>
-                <th>Preço</th>
+                <th>Tipo</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Valor</th>
                 <th>Ações</th>
             </tr>
             </thead>
@@ -27,28 +28,30 @@
 
             if (!$results) {
                 echo '<tr>
-                                <td colspan="5">Nenhum Produto Cadastrado</td>
-                                </tr>';
+                            <td colspan="5">Nenhum Produto Cadastrado</td>
+                            </tr>';
             }
             foreach ($results as $r) {
                 echo '<tr>';
                 echo '<td>' . $r->id_aquisicao . '</td>';
-                echo '<td>' . $r->descricao . '</td>';
-                echo '<td>' . $r->estoque . '</td>';
-                echo '<td>' . number_format($r->precoVenda, 2, ',', '.') . '</td>';
+                echo '<td>' . $r->tipo_aquisicao_id . '</td>';
+                echo '<td>' . $r->marca_id . '</td>';
+                echo '<td>' . $r->modelo_id . '</td>';
+                echo '<td>' . number_format($r->precoCompra, 2, ',', '.') . '</td>';
                 echo '<td>';
-                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) {
-                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/produtos/visualizar/' . $r->idProdutos . '" class="btn tip-top" title="Visualizar Produto"><i class="fas fa-eye"></i></a>  ';
+                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vAquisicao')) {
+                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/aquisicoes/visualizar/' . $r->id_aquisicao . '" class="btn tip-top" title="Visualizar Produto"><i class="fas fa-eye"></i></a>  ';
                 }
-                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) {
-                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/produtos/editar/' . $r->idProdutos . '" class="btn btn-info tip-top" title="Editar Produto"><i class="fas fa-edit"></i></a>';
+                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eAquisicao')) {
+                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/produtos/editar/' . $r->id_aquisicao . '" class="btn btn-info tip-top" title="Editar Produto"><i class="fas fa-edit"></i></a>';
                 }
-                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dProduto')) {
-                    echo '<a style="margin-right: 1%" href="#modal-excluir" role="button" data-toggle="modal" produto="' . $r->idProdutos . '" class="btn btn-danger tip-top" title="Excluir Produto"><i class="fas fa-trash-alt"></i></a>';
+                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dAquisicao')) {
+                    echo '<a style="margin-right: 1%" href="#modal-excluir" role="button" data-toggle="modal" produto="' . $r->id_aquisicao . '" class="btn btn-danger tip-top" title="Excluir Produto"><i class="fas fa-trash-alt"></i></a>';
                 }
-                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) {
-                    echo '<a href="#atualizar-estoque" role="button" data-toggle="modal" produto="' . $r->idProdutos . '" estoque="' . $r->estoque . '" class="btn btn-primary tip-top" title="Atualizar Estoque"><i class="fas fa-plus-square"></i></a>';
-                }
+                /*
+                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eAquisicao')) {
+                    echo '<a href="#atualizar-estoque" role="button" data-toggle="modal" produto="' . $r->id_aquisicao . '" estoque="' . $r->estoque . '" class="btn btn-primary tip-top" title="Atualizar Estoque"><i class="fas fa-plus-square"></i></a>';
+                }*/
                 echo '</td>';
                 echo '</tr>';
             } ?>

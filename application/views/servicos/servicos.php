@@ -12,7 +12,7 @@
     <div class="widget-content nopadding tab-content">
         <table id="tabela" class="table table-bordered ">
             <thead>
-                <tr style="backgroud-color: #2D335B">
+                <tr style="background-color: #2D335B">
                     <th>Cod. Serviço</th>
                     <th>Nome</th>
                     <th>Preço</th>

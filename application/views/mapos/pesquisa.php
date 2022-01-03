@@ -22,7 +22,7 @@
                 <div class="widget-content nopadding tab-content">
                     <table class="table table-bordered ">
                         <thead>
-                        <tr style="backgroud-color: #2D335B">
+                        <tr style="background-color: #2D335B">
                             <th>#</th>
                             <th>Nome</th>
                             <th>Preço</th>
@@ -121,7 +121,7 @@
             <div class="widget-content nopadding tab-content">
                 <table class="table table-bordered ">
                     <thead>
-                    <tr style="backgroud-color: #2D335B">
+                    <tr style="background-color: #2D335B">
                         <th>#</th>
                         <th>Nome</th>
                         <th>Preço</th>
@@ -165,7 +165,7 @@
             <div class="widget-content nopadding tab-content">
                 <table class="table table-bordered ">
                     <thead>
-                    <tr style="backgroud-color: #2D335B">
+                    <tr style="background-color: #2D335B">
                         <th>#</th>
                         <th>Data Inicial</th>
                         <th>Descrição</th>

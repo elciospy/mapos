@@ -109,7 +109,7 @@ $periodo = $this->input->get('periodo');
 
             <table class="table table-bordered " id="divLancamentos">
                 <thead>
-                <tr style="backgroud-color: #2D335B">
+                <tr style="background-color: #2D335B">
                     <th>#</th>
                     <th>Tipo</th>
                     <th>Cliente / Fornecedor</th>

@@ -26,7 +26,7 @@ if (!$results) {
 
                 <table id="tabela" class="table table-bordered ">
                     <thead>
-                        <tr style="backgroud-color: #2D335B">
+                        <tr style="background-color: #2D335B">
                             <th>#</th>
                             <th>Responsável</th>
                             <th>Data Inicial</th>
@@ -65,7 +65,7 @@ if (!$results) {
 
                 <table class="table table-bordered ">
                     <thead>
-                        <tr style="backgroud-color: #2D335B">
+                        <tr style="background-color: #2D335B">
                             <th>#</th>
                             <th>Responsável</th>
                             <th>Data Inicial</th>
