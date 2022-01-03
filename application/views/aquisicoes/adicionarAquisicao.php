@@ -39,11 +39,11 @@
             </div>
             <div class="widget-content nopadding tab-content">
                 <?php echo $custom_error; ?>
-                <form action="<?php echo current_url(); ?>" id="formProduto" method="post" class="form-horizontal">
+                <form action="<?php echo current_url(); ?>" id="formAquisicao" method="post" class="form-horizontal">
                     <div class="control-group">
-                        <label for="tipo" class="control-label">Tipo<span class="required">*</span></label>
+                        <label for="tipo_aquisicao" class="control-label">Tipo<span class="required">*</span></label>
                         <div class="controls">
-                            <select id="tipo" name="tipo"></select>
+                            <select id="tipo_aquisicao" name="tipo_aquisicao"></select>
                         </div>
                     </div>
                     <div class="control-group">
@@ -56,7 +56,7 @@
                         <label for="modelo" class="control-label">Modelo<span class="required">*</span></label>
                         <div class="controls">
                         <input id="modelo" class="span6" type="text" name="modelo" value="" />
-                        <input id="modelos_id" class="span12" type="hidden" name="modelos_id" value="" />
+                        <input id="modelo_id" class="span12" type="hidden" name="modelo_id" value="" />
                         </div>
                     </div>                    
                     <div class="control-group">
@@ -78,29 +78,11 @@
                             <input style="width: 9em;" id="precoCompra" class="money" data-affixes-stay="true" data-thousands="" data-decimal="." type="text" name="precoCompra" value="<?php echo set_value('precoCompra'); ?>" />
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
-                        <div class="controls">
-                            <select id="unidade" name="unidade"></select>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label for="estoque" class="control-label">Estoque<span class="required">*</span></label>
-                        <div class="controls">
-                            <input id="estoque" type="text" name="estoque" value="<?php echo set_value('estoque'); ?>" />
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label for="estoqueMinimo" class="control-label">Estoque Mínimo</label>
-                        <div class="controls">
-                            <input id="estoqueMinimo" type="text" name="estoqueMinimo" value="<?php echo set_value('estoqueMinimo'); ?>" />
-                        </div>
-                    </div>
                     <div class="form-actions">
                         <div class="span12">
                             <div class="span6 offset3">
                                 <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar</button>
-                                <a href="<?php echo base_url() ?>index.php/produtos" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
+                                <a href="<?php echo base_url() ?>index.php/aquisicoes" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
                             </div>
                         </div>
                     </div>
@@ -114,42 +96,34 @@
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
+
         $(".money").maskMoney();
-        $.getJSON('<?php echo base_url() ?>assets/json/tipo_aquisicao.json', function(data) {
-            for (i in data.aquisicoes) {
-                $('#tipo').append(new Option(data.aquisicoes[i].descricao, data.aquisicoes[i].sigla));
-            }
-        });
+
         $("#modelo").autocomplete({
             source: "<?php echo base_url(); ?>index.php/aquisicoes/autoCompleteModelo",
             minLength: 1,
             select: function(event, ui) {
-                $("#modelos_id").val(ui.item.id);
-            }
-        });
-        $.getJSON('<?php echo base_url() ?>assets/json/tabela_medidas.json', function(data) {
-            for (i in data.medidas) {
-                $('#unidade').append(new Option(data.medidas[i].descricao, data.medidas[i].sigla));
+                $("#modelo_id").val(ui.item.id);
             }
         });
 
-        $.getJSON('<?php echo base_url() ?>assets/json/marcas.json', function(data) {
-            for (i in data.marcas) {
-                $('#marca').append(new Option(data.marcas[i].marca, data.marcas[i].idMarcas));
+        $.getJSON('<?php echo base_url() ?>index.php/aquisicoes/autoCompleteTipo', function(data) {
+            for (i in data) {
+                $('#tipo_aquisicao').append(new Option(data[i].label, data[i].id));
             }
         });
-        $('#formProduto').validate({
+
+        $.getJSON('<?php echo base_url() ?>index.php/aquisicoes/autoCompleteMarca', function(data) {
+            for (i in data) {
+                $('#marca').append(new Option(data[i].label, data[i].id));
+            }
+        });
+        $('#formAquisicao').validate({
             rules: {
                 modelo: {
                     required: true
                 },
-                unidade: {
-                    required: true
-                },
                 precoCompra: {
-                    required: true
-                },
-                estoque: {
                     required: true
                 }
             },
@@ -157,13 +131,7 @@
                 modelo: {
                     required: 'Campo Requerido.'
                 },
-                unidade: {
-                    required: 'Campo Requerido.'
-                },
                 precoCompra: {
-                    required: 'Campo Requerido.'
-                },
-                estoque: {
                     required: 'Campo Requerido.'
                 }
             },

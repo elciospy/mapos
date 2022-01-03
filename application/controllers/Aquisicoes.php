@@ -47,7 +47,7 @@ class Aquisicoes extends MY_Controller
 
     public function adicionar()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aProduto')) {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aAquisicao')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para adicionar aquisicoes.');
             redirect(base_url());
         }
@@ -58,20 +58,14 @@ class Aquisicoes extends MY_Controller
         if ($this->form_validation->run('aquisicoes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
+
             $precoCompra = $this->input->post('precoCompra');
             $precoCompra = str_replace(",", "", $precoCompra);
-            $precoVenda = $this->input->post('precoVenda');
-            $precoVenda = str_replace(",", "", $precoVenda);
             $data = [
-                'codDeBarra' => set_value('codDeBarra'),
-                'descricao' => set_value('descricao'),
-                'unidade' => set_value('unidade'),
-                'precoCompra' => $precoCompra,
-                'precoVenda' => $precoVenda,
-                'estoque' => set_value('estoque'),
-                'estoqueMinimo' => set_value('estoqueMinimo'),
-                'saida' => set_value('saida'),
-                'entrada' => set_value('entrada'),
+                'tipo_aquisicao_id'   => set_value('tipo_aquisicao'),
+                'marca_id'  => set_value('marca'),
+                'modelo_id' => set_value('modelo_id'),
+                'precoCompra' => $precoCompra
             ];
 
             if ($this->aquisicoes_model->add('aquisicoes', $data) == true) {
@@ -212,5 +206,22 @@ class Aquisicoes extends MY_Controller
             $q = strtolower($_GET['term']);
             $this->aquisicoes_model->autoCompleteModelo($q);
         }
+    }
+
+    public function autoCompleteTipo()
+    {
+        /*
+        if (isset($_GET['term'])) {
+            $q = strtolower($_GET['term']);*/
+            $this->aquisicoes_model->autoCompleteTipo();
+        /* }*/
+    }
+    public function autoCompleteMarca()
+    {
+        /*
+        if (isset($_GET['term'])) {
+            $q = strtolower($_GET['term']);*/
+            $this->aquisicoes_model->autoCompleteMarca();
+        /* }*/
     }
 }

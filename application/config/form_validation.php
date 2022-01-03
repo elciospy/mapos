@@ -73,6 +73,18 @@ $config = [
             'rules' => 'required|trim',
         ]
     ],
+    'aquisicoes' => [
+        [
+            'field' => 'modelo',
+            'label' => 'Modelo da Aquisição',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'precoCompra',
+            'label' => 'Preço de Compra',
+            'rules' => 'required|trim',
+        ]
+    ],
     'produtos' => [
         [
             'field' => 'descricao',

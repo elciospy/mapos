@@ -94,4 +94,26 @@ class Aquisicoes_model extends CI_Model
             echo json_encode($row_set);
         }
     }
+    public function autoCompleteTipo()
+    {
+        $this->db->select('*');
+        $query = $this->db->get('tipo_aquisicao');
+        if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $row) {
+                $row_set[] = ['label' => $row['descricao'], 'id' => $row['id_tipo_aquisicao']];
+            }
+            echo json_encode($row_set);
+        }
+    }
+    public function autoCompleteMarca()
+    {
+        $this->db->select('*');
+        $query = $this->db->get('marcas');
+        if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $row) {
+                $row_set[] = ['label' => $row['descricao'], 'id' => $row['marca_id']];
+            }
+            echo json_encode($row_set);
+        }
+    }
 }
