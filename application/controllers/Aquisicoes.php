@@ -62,10 +62,15 @@ class Aquisicoes extends MY_Controller
 
             $precoCompra = $this->input->post('precoCompra');
             $precoCompra = str_replace(",", "", $precoCompra);
+            $dataAquisicao = $this->input->post('dataAquisicao');
+            $dataAquisicao = explode('/', $dataAquisicao);
+            $dataAquisicao = $dataAquisicao[2] . '-' . $dataAquisicao[1] . '-' . $dataAquisicao[0];
+
             $data = [
                 'idTipoAquisicao'   => set_value('tipo_aquisicao'),
                 'idMarca'  => set_value('marca'),
                 'idModelo' => set_value('idModelo'),
+                'dataAquisicao' => $dataAquisicao,
                 'precoCompra' => $precoCompra
             ];
 

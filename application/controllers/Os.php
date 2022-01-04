@@ -68,10 +68,11 @@ class Os extends MY_Controller
             $this->data['configuration']['per_page'],
             $this->uri->segment(3)
         );
-
+    
+        /*
         print_r('<br/><br/><br/>');    
-
         print_r($this->db->last_query());  
+        */
 
         $this->data['texto_de_notificacao'] = $this->data['configuration']['notifica_whats'];
         $this->data['emitente'] = $this->mapos_model->getEmitente();

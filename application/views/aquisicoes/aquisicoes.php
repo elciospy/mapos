@@ -19,6 +19,7 @@
                 <th>Tipo</th>
                 <th>Marca</th>
                 <th>Modelo</th>
+                <th>Data Aquisição</th>
                 <th>Valor</th>
                 <th>Ações</th>
             </tr>
@@ -32,11 +33,15 @@
                             </tr>';
             }
             foreach ($results as $r) {
+
+                $dataAquisicao = date(('d/m/Y'), strtotime($r->dataAquisicao));
+
                 echo '<tr>';
                 echo '<td>' . $r->idAquisicao . '</td>';
                 echo '<td>' . $r->tipoAquisicao . '</td>';
                 echo '<td>' . $r->marca . '</td>';
                 echo '<td>' . $r->modelo . '</td>';
+                echo '<td>' . $dataAquisicao . '</td>';
                 echo '<td>' . number_format($r->precoCompra, 2, ',', '.') . '</td>';
                 echo '<td>';
                 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vAquisicao')) {

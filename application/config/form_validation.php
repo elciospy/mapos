@@ -80,6 +80,11 @@ $config = [
             'rules' => 'required|trim',
         ],
         [
+            'field' => 'dataAquisicao',
+            'label' => 'DataAquisicao',
+            'rules' => 'required|trim',
+        ],
+        [
             'field' => 'precoCompra',
             'label' => 'Preço de Compra',
             'rules' => 'required|trim',

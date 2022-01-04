@@ -2,6 +2,9 @@
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 
 <style>
+    .ui-datepicker {
+        z-index: 9999 !important;
+    }
     /* Hiding the checkbox, but allowing it to be focused */
     .badgebox {
         opacity: 0;
@@ -55,23 +58,16 @@
                     <div class="control-group">
                         <label for="modelo" class="control-label">Modelo<span class="required">*</span></label>
                         <div class="controls">
-                        <input id="modelo" class="span6" type="text" name="modelo" value="" />
-                        <input id="idModelo" class="span12" type="hidden" name="idModelo" value="" />
+                            <input id="modelo" class="span6" type="text" name="modelo" value="" />
+                            <input id="idModelo" class="span12" type="hidden" name="idModelo" value="" />
                         </div>
-                    </div>                    
+                    </div>
                     <div class="control-group">
-                        <label class="control-label">Tipo de Movimento</label>
+                        <label for="dataAquisicao" class="control-label">Data Aquisição<span class="required">*</span></label>
                         <div class="controls">
-                            <label for="entrada" class="btn btn-default" style="margin-top: 5px;">Entrada
-                                <input type="checkbox" id="entrada" name="entrada" class="badgebox" value="1" checked>
-                                <span class="badge">&check;</span>
-                            </label>
-                            <label for="saida" class="btn btn-default" style="margin-top: 5px;">Saída
-                                <input type="checkbox" id="saida" name="saida" class="badgebox" value="1" checked>
-                                <span class="badge">&check;</span>
-                            </label>
+                        <input id="dataAquisicao" autocomplete="off" class="span2 datepicker" type="text" name="dataAquisicao" value="<?php echo date('d/m/Y'); ?>" />
                         </div>
-                    </div>                    
+                    </div>
                     <div class="control-group">
                         <label for="precoCompra" class="control-label">Preço de Compra<span class="required">*</span></label>
                         <div class="controls">
@@ -123,12 +119,18 @@
                 modelo: {
                     required: true
                 },
+                dataAquisicao: {
+                    required: true
+                },
                 precoCompra: {
                     required: true
                 }
             },
             messages: {
                 modelo: {
+                    required: 'Campo Requerido.'
+                },
+                dataAquisicao: {
                     required: 'Campo Requerido.'
                 },
                 precoCompra: {
@@ -144,6 +146,10 @@
                 $(element).parents('.control-group').removeClass('error');
                 $(element).parents('.control-group').addClass('success');
             }
+            
+        });
+        $(".datepicker").datepicker({
+            dateFormat: 'dd/mm/yy'
         });
     });
 </script>
