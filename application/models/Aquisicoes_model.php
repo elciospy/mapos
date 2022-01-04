@@ -16,14 +16,23 @@ class Aquisicoes_model extends CI_Model
     
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-        $this->db->select($fields);
+        $this->db->select(
+            $fields . 
+            ',tipo_aquisicao.tipoAquisicao'.
+            ',marcas.marca'.
+            ',modelos.modelo'
+        );
         $this->db->from($table);
-        $this->db->order_by('id_aquisicao', 'desc');
+        $this->db->join('tipo_aquisicao', 'tipo_aquisicao.idTipoAquisicao = aquisicoes.idTipoAquisicao');
+        $this->db->join('modelos', 'modelos.idModelo = aquisicoes.idModelo');
+        $this->db->join('marcas', 'marcas.idMarca = aquisicoes.idMarca');
+
+        $this->db->order_by('idAquisicao', 'desc');
         $this->db->limit($perpage, $start);
         if ($where) {
             $this->db->where($where);
         }
-        
+      
         $query = $this->db->get();
         
         $result =  !$one  ? $query->result() : $query->row();
@@ -32,7 +41,7 @@ class Aquisicoes_model extends CI_Model
 
     public function getById($id)
     {
-        $this->db->where('id_aquisicao', $id);
+        $this->db->where('idAquisicao', $id);
         $this->db->limit(1);
         return $this->db->get('aquisicoes')->row();
     }
@@ -77,7 +86,7 @@ class Aquisicoes_model extends CI_Model
 
     public function updateEstoque($produto, $quantidade, $operacao = '-')
     {
-        $sql = "UPDATE aquisicao set estoque = estoque $operacao ? WHERE id_aquisicao = ?";
+        $sql = "UPDATE aquisicao set estoque = estoque $operacao ? WHERE idAquisicao = ?";
         return $this->db->query($sql, [$quantidade, $produto]);
     }
 
@@ -85,11 +94,11 @@ class Aquisicoes_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->limit(5);
-        $this->db->like('descricao', $q);
+        $this->db->like('modelo', $q);
         $query = $this->db->get('modelos');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['descricao'], 'id' => $row['id_modelo']];
+                $row_set[] = ['label' => $row['modelo'], 'id' => $row['idModelo']];
             }
             echo json_encode($row_set);
         }
@@ -100,7 +109,7 @@ class Aquisicoes_model extends CI_Model
         $query = $this->db->get('tipo_aquisicao');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['descricao'], 'id' => $row['id_tipo_aquisicao']];
+                $row_set[] = ['label' => $row['tipoAquisicao'], 'id' => $row['idTipoAquisicao']];
             }
             echo json_encode($row_set);
         }
@@ -111,7 +120,7 @@ class Aquisicoes_model extends CI_Model
         $query = $this->db->get('marcas');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['descricao'], 'id' => $row['marca_id']];
+                $row_set[] = ['label' => $row['marca'], 'id' => $row['idMarca']];
             }
             echo json_encode($row_set);
         }

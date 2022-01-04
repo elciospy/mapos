@@ -56,7 +56,7 @@
                         <label for="modelo" class="control-label">Modelo<span class="required">*</span></label>
                         <div class="controls">
                         <input id="modelo" class="span6" type="text" name="modelo" value="" />
-                        <input id="modelo_id" class="span12" type="hidden" name="modelo_id" value="" />
+                        <input id="idModelo" class="span12" type="hidden" name="idModelo" value="" />
                         </div>
                     </div>                    
                     <div class="control-group">
@@ -103,7 +103,7 @@
             source: "<?php echo base_url(); ?>index.php/aquisicoes/autoCompleteModelo",
             minLength: 1,
             select: function(event, ui) {
-                $("#modelo_id").val(ui.item.id);
+                $("#idModelo").val(ui.item.id);
             }
         });
 

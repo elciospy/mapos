@@ -40,9 +40,10 @@ class Aquisicoes extends MY_Controller
         $this->pagination->initialize($this->data['configuration']);
 
         $this->data['results'] = $this->aquisicoes_model->get('aquisicoes', '*', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
-
+    
         $this->data['view'] = 'aquisicoes/aquisicoes';
         return $this->layout();
+        
     }
 
     public function adicionar()
@@ -62,9 +63,9 @@ class Aquisicoes extends MY_Controller
             $precoCompra = $this->input->post('precoCompra');
             $precoCompra = str_replace(",", "", $precoCompra);
             $data = [
-                'tipo_aquisicao_id'   => set_value('tipo_aquisicao'),
-                'marca_id'  => set_value('marca'),
-                'modelo_id' => set_value('modelo_id'),
+                'idTipoAquisicao'   => set_value('tipo_aquisicao'),
+                'idMarca'  => set_value('marca'),
+                'idModelo' => set_value('idModelo'),
                 'precoCompra' => $precoCompra
             ];
 
@@ -113,10 +114,10 @@ class Aquisicoes extends MY_Controller
                 'entrada' => set_value('entrada'),
             ];
 
-            if ($this->aquisicoes_model->edit('aquisicoes', $data, 'id_aquisicao', $this->input->post('id_aquisicao')) == true) {
+            if ($this->aquisicoes_model->edit('aquisicoes', $data, 'idAquisicao', $this->input->post('idAquisicao')) == true) {
                 $this->session->set_flashdata('success', 'Produto editado com sucesso!');
-                log_info('Alterou um produto. ID: ' . $this->input->post('id_aquisicao'));
-                redirect(site_url('aquisicoes/editar/') . $this->input->post('id_aquisicao'));
+                log_info('Alterou um produto. ID: ' . $this->input->post('idAquisicao'));
+                redirect(site_url('aquisicoes/editar/') . $this->input->post('idAquisicao'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>An Error Occured</p></div>';
             }
@@ -144,7 +145,7 @@ class Aquisicoes extends MY_Controller
 
         if ($this->data['result'] == null) {
             $this->session->set_flashdata('error', 'Produto não encontrado.');
-            redirect(site_url('aquisicoes/editar/') . $this->input->post('id_aquisicao'));
+            redirect(site_url('aquisicoes/editar/') . $this->input->post('idAquisicao'));
         }
 
         $this->data['view'] = 'aquisicoes/visualizarProduto';
@@ -166,7 +167,7 @@ class Aquisicoes extends MY_Controller
 
         $this->aquisicoes_model->delete('aquisicoes_os', 'aquisicoes_id', $id);
         $this->aquisicoes_model->delete('itens_de_vendas', 'aquisicoes_id', $id);
-        $this->aquisicoes_model->delete('aquisicoes', 'id_aquisicao', $id);
+        $this->aquisicoes_model->delete('aquisicoes', 'idAquisicao', $id);
 
         log_info('Removeu um produto. ID: ' . $id);
 
@@ -191,7 +192,7 @@ class Aquisicoes extends MY_Controller
             'estoque' => $estoque,
         ];
 
-        if ($this->aquisicoes_model->edit('aquisicoes', $data, 'id_aquisicao', $idProduto) == true) {
+        if ($this->aquisicoes_model->edit('aquisicoes', $data, 'idAquisicao', $idProduto) == true) {
             $this->session->set_flashdata('success', 'Estoque de Produto atualizado com sucesso!');
             log_info('Atualizou estoque de um produto. ID: ' . $idProduto);
             redirect(site_url('aquisicoes/visualizar/') . $idProduto);
