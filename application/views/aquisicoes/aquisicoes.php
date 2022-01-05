@@ -48,7 +48,7 @@
                     echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/aquisicoes/visualizar/' . $r->idAquisicao . '" class="btn tip-top" title="Visualizar Produto"><i class="fas fa-eye"></i></a>  ';
                 }
                 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eAquisicao')) {
-                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/produtos/editar/' . $r->idAquisicao . '" class="btn btn-info tip-top" title="Editar Produto"><i class="fas fa-edit"></i></a>';
+                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/aquisicoes/editar/' . $r->idAquisicao . '" class="btn btn-info tip-top" title="Editar Produto"><i class="fas fa-edit"></i></a>';
                 }
                 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dAquisicao')) {
                     echo '<a style="margin-right: 1%" href="#modal-excluir" role="button" data-toggle="modal" produto="' . $r->idAquisicao . '" class="btn btn-danger tip-top" title="Excluir Produto"><i class="fas fa-trash-alt"></i></a>';

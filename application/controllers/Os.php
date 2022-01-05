@@ -73,7 +73,6 @@ class Os extends MY_Controller
         print_r('<br/><br/><br/>');    
         print_r($this->db->last_query());  
         */
-
         $this->data['texto_de_notificacao'] = $this->data['configuration']['notifica_whats'];
         $this->data['emitente'] = $this->mapos_model->getEmitente();
         $this->data['view'] = 'os/os';

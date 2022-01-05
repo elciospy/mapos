@@ -76,11 +76,11 @@
                     </div>
                     <div class="form-actions">
                         <div class="span12">
-                            <div class="span6 offset3">
-                                <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar</button>
+                            <div style="text-align: center">
+                                <button type="submit" class="btn btn-success" id="btnContinuar"><i class="fas fa-plus"></i> Continuar</button>
                                 <a href="<?php echo base_url() ?>index.php/aquisicoes" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
                             </div>
-                        </div>
+                        </div>      
                     </div>
                 </form>
             </div>
