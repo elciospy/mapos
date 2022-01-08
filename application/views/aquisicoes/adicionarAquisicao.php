@@ -43,18 +43,26 @@
             <div class="widget-content nopadding tab-content">
                 <?php echo $custom_error; ?>
                 <form action="<?php echo current_url(); ?>" id="formAquisicao" method="post" class="form-horizontal">
-                    <div class="control-group">
-                        <label for="tipo_aquisicao" class="control-label">Tipo<span class="required">*</span></label>
-                        <div class="controls">
-                            <select id="tipo_aquisicao" name="tipo_aquisicao"></select>
-                        </div>
+                    <label for="tipo_aquisicao" class="control-label">Tipo<span class="required">*</span></label>
+                    <div class="controls">
+                        <select id="tipo_aquisicao" name="tipo_aquisicao">
+                        <?php foreach ($tipo_aquisicoes as $tipo) : ?>
+                            <option value="<?php echo $tipo['idTipoAquisicao']; ?>">
+                                <?php echo $tipo['tipoAquisicao']; ?>
+                            </option>
+                        <?php endforeach ?>
+                        </select>
                     </div>
                     <div class="control-group">
-                        <label for="marca" class="control-label">Marca<span class="required">*</span></label>
-                        <div class="controls">
-                            <select id="marca" name="marca"></select>
+                            <label for="idMarca" class="control-label">Marca<span class="required">*</span></label>
+                            <div class="controls">
+                            <select id="idMarca" name="idMarca">
+                                <?php foreach ($marcas as $marca) : ?>
+                                    <option value="<?php echo $marca['idMarca']; ?>">
+                                    <?php echo $marca['marca']; ?></option>
+                                <?php endforeach ?>
+                            </select>
                         </div>
-                    </div>
                     <div class="control-group">
                         <label for="modelo" class="control-label">Modelo<span class="required">*</span></label>
                         <div class="controls">
@@ -74,6 +82,30 @@
                             <input style="width: 9em;" id="precoCompra" class="money" data-affixes-stay="true" data-thousands="" data-decimal="." type="text" name="precoCompra" value="<?php echo set_value('precoCompra'); ?>" />
                         </div>
                     </div>
+                    <div class="span6" style="padding: 1%; margin-left: 0">
+                                        <label for="descricaoProduto">
+                                            <h4>Descrição Produto</h4>
+                                        </label>
+                                        <textarea class="span12 editor" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5"></textarea>
+                                    </div>
+                                    <div class="span6" style="padding: 1%; margin-left: 0">
+                                        <label for="defeito">
+                                            <h4>Defeito</h4>
+                                        </label>
+                                        <textarea class="span12 editor" name="defeito" id="defeito" cols="30" rows="5"></textarea>
+                                    </div>
+                                    <div class="span6" style="padding: 1%; margin-left: 0">
+                                        <label for="observacoes">
+                                            <h4>Observações</h4>
+                                        </label>
+                                        <textarea class="span12 editor" name="observacoes" id="observacoes" cols="30" rows="5"></textarea>
+                                    </div>
+                                    <div class="span6" style="padding: 1%; margin-left: 0">
+                                        <label for="laudoTecnico">
+                                            <h4>Laudo Técnico</h4>
+                                        </label>
+                                        <textarea class="span12 editor" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5"></textarea>
+                                    </div>
                     <div class="form-actions">
                         <div class="span12">
                             <div style="text-align: center">
@@ -92,26 +124,12 @@
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-
         $(".money").maskMoney();
-
         $("#modelo").autocomplete({
             source: "<?php echo base_url(); ?>index.php/aquisicoes/autoCompleteModelo",
             minLength: 1,
             select: function(event, ui) {
                 $("#idModelo").val(ui.item.id);
-            }
-        });
-
-        $.getJSON('<?php echo base_url() ?>index.php/aquisicoes/autoCompleteTipo', function(data) {
-            for (i in data) {
-                $('#tipo_aquisicao').append(new Option(data[i].label, data[i].id));
-            }
-        });
-
-        $.getJSON('<?php echo base_url() ?>index.php/aquisicoes/autoCompleteMarca', function(data) {
-            for (i in data) {
-                $('#marca').append(new Option(data[i].label, data[i].id));
             }
         });
         $('#formAquisicao').validate({

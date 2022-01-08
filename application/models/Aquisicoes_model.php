@@ -41,6 +41,8 @@ class Aquisicoes_model extends CI_Model
 
     public function getById($id)
     {
+        $this->db->select('*, modelos.modelo');
+        $this->db->join('modelos', 'modelos.idModelo = aquisicoes.idModelo');
         $this->db->where('idAquisicao', $id);
         $this->db->limit(1);
         return $this->db->get('aquisicoes')->row();
@@ -158,25 +160,14 @@ class Aquisicoes_model extends CI_Model
     {
         $this->db->select('*');
         $query = $this->db->get('tipo_aquisicao');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['tipoAquisicao'], 'id' => $row['idTipoAquisicao']];
-            }
-            echo json_encode($row_set);
-        }
+        return $query->result_array();
     }
     public function autoCompleteMarca()
     {
         $this->db->select('*');
         $query = $this->db->get('marcas');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['marca'], 'id' => $row['idMarca']];
-            }
-            echo json_encode($row_set);
-        }
+        return $query->result_array();
     }
-
     public function isEditable($id = null)
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eAquisicao')) {

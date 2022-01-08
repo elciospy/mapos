@@ -282,7 +282,7 @@
                                                 <th width="8%">Quantidade</th>
                                                 <th width="10%">Preço</th>
                                                 <th width="6%">Ações</th>
-                                                <th width="10%">Sub-totals</th>
+                                                <th width="10%">Sub-totais</th>
                                             </tr>
                                         </thead>
                                         <tbody>

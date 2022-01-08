@@ -27,38 +27,20 @@
                 <span class="icon">
                     <i class="fas fa-diagnoses"></i>
                 </span>
-                <h5>Ordem de Serviço</h5>
+                <h5>Aquisições</h5>
                 <div class="buttons">
-                    <?php if ($result->faturado == 0) { ?>
-                        <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="btn btn-mini btn-danger">
-                            <i class="fas fa-cash-register"></i> Faturar</a>
-                    <?php
-                    } ?>
-
                     <?php if ($editavel) {
-                        echo '<a title="Editar OS" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '"><i class="fas fa-edit"></i> Editar</a>';
+                        echo '<a title="Editar OS" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/os/editar/' . $result->idAquisicao . '"><i class="fas fa-edit"></i> Editar</a>';
                     } ?>
-                    <a title="Visualizar OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/visualizar/<?php echo $result->idOs; ?>"><i class="fas fa-eye"></i> Visualizar OS</a>
-                    <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir A4</a>
-                    <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir Não Fiscal</a>
-                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-                        $this->load->model('os_model');
-                        $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
-                        $troca = [$result->nomeCliente, $result->idOs, $result->status, 'R$ ' . number_format($totalProdutos + $totalServico, 2, ',', '.'), strip_tags($result->descricaoProduto), ($emitente ? $emitente[0]->nome : ''), ($emitente ? $emitente[0]->telefone : ''), strip_tags($result->observacoes), strip_tags($result->defeito), strip_tags($result->laudoTecnico), date('d/m/Y', strtotime($result->dataFinal)), date('d/m/Y', strtotime($result->dataInicial)), $result->garantia . ' dias'];
-                        $texto_de_notificacao = $this->os_model->criarTextoWhats($texto_de_notificacao, $troca);
-                        if (!empty($zapnumber)) {
-                            echo '<a title="Enviar Por WhatsApp" class="btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '" ' . ($zapnumber == '' ? 'disabled' : '') . '><i class="fab fa-whatsapp"></i> WhatsApp</a>';
-                        }
-                    } ?>
-
-                    <a title="Enviar por E-mail" class="btn btn-mini btn-warning" href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>"><i class="fas fa-envelope"></i> Enviar por E-mail</a>
-                    <?php if ($result->garantias_id) { ?> <a target="_blank" title="Imprimir Termo de Garantia" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->garantias_id; ?>"><i class="fas fa-text-width"></i> Imprimir Termo de Garantia</a> <?php } ?>
+                    <a title="Visualizar OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/visualizar/<?php echo $result->idAquisicao; ?>"><i class="fas fa-eye"></i> Visualizar OS</a>
+                    <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idAquisicao; ?>"><i class="fas fa-print"></i> Imprimir A4</a>
+                    <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idAquisicao; ?>"><i class="fas fa-print"></i> Imprimir Não Fiscal</a>
                 </div>
             </div>
             <div class="widget-content nopadding tab-content">
                 <div class="span12" id="divProdutosServicos" style=" margin-left: 0">
                     <ul class="nav nav-tabs">
-                        <li class="active" id="tabDetalhes"><a href="#tab1" data-toggle="tab">Detalhes da OS</a></li>
+                        <li class="active" id="tabDetalhes"><a href="#tab1" data-toggle="tab">Detalhes da Aquisição</a></li>
                         <li id="tabProdutos"><a href="#tab2" data-toggle="tab">Produtos</a></li>
                         <li id="tabServicos"><a href="#tab3" data-toggle="tab">Serviços</a></li>
                         <li id="tabAnexos"><a href="#tab4" data-toggle="tab">Anexos</a></li>
@@ -67,86 +49,52 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
                             <div class="span12" id="divCadastrarOs">
-                                <form action="<?php echo current_url(); ?>" method="post" id="formOs">
-                                    <?php echo form_hidden('idOs', $result->idOs) ?>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <h3>N° OS:
-                                            <?php echo $result->idOs; ?>
-                                        </h3>
-                                        <div class="span6" style="margin-left: 0">
-                                            <label for="cliente">Cliente<span class="required">*</span></label>
-                                            <input id="cliente" class="span12" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>" />
-                                            <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="<?php echo $result->clientes_id ?>" />
-                                            <input id="valorTotal" type="hidden" name="valorTotal" value="" />
-                                        </div>
-                                        <div class="span6">
-                                            <label for="tecnico">Técnico / Responsável<span class="required">*</span></label>
-                                            <input id="tecnico" class="span12" type="text" name="tecnico" value="<?php echo $result->nome ?>" />
-                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?php echo $result->usuarios_id ?>" />
-                                        </div>
-                                    </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span3">
-                                            <label for="status">Status<span class="required">*</span></label>
-                                            <select class="span12" name="status" id="status" value="">
-                                                <option <?php if ($result->status == 'Orçamento') {
-                        echo 'selected';
-                    } ?> value="Orçamento">Orçamento
-                                                </option>
-                                                <option <?php if ($result->status == 'Aberto') {
-                        echo 'selected';
-                    } ?> value="Aberto">Aberto
-                                                </option>
-                                                <option <?php if ($result->status == 'Faturado') {
-                        echo 'selected';
-                    } ?> value="Faturado">Faturado
-                                                </option>
-                                                <option <?php if ($result->status == 'Negociação') {
-                        echo 'selected';
-                    } ?> value="Negociação">Negociação
-                                                </option>
-                                                <option <?php if ($result->status == 'Em Andamento') {
-                        echo 'selected';
-                    } ?> value="Em Andamento">Em Andamento
-                                                </option>
-                                                <option <?php if ($result->status == 'Finalizado') {
-                        echo 'selected';
-                    } ?> value="Finalizado">Finalizado
-                                                </option>
-                                                <option <?php if ($result->status == 'Cancelado') {
-                        echo 'selected';
-                    } ?> value="Cancelado">Cancelado
-                                                </option>
-                                                <option <?php if ($result->status == 'Aguardando Peças') {
-                        echo 'selected';
-                    } ?> value="Aguardando Peças">Aguardando Peças
-                                                </option>
-                                                <option <?php if ($result->status == 'Aprovado') {
-                        echo 'selected';
-                    } ?> value="Aprovado">Aprovado
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="span3">
-                                            <label for="dataInicial">Data Inicial<span class="required">*</span></label>
-                                            <input id="dataInicial" autocomplete="off" class="span12 datepicker" type="text" name="dataInicial" value="<?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>" />
-                                        </div>
-                                        <div class="span3">
-                                            <label for="dataFinal">Data Final<span class="required">*</span></label>
-                                            <input id="dataFinal" autocomplete="off" class="span12 datepicker" type="text" name="dataFinal" value="<?php echo date('d/m/Y', strtotime($result->dataFinal)); ?>" />
-                                        </div>
-                                        <div class="span3">
-                                            <label for="garantia">Garantia (dias)</label>
-                                            <input id="garantia" type="number" min="0" max="9999" class="span12" name="garantia" value="<?php echo $result->garantia ?>" />
-                                            <?php echo form_error('garantia'); ?>
-                                            <label for="termoGarantia">Termo Garantia</label>
-                                            <input id="termoGarantia" class="span12" type="text" name="termoGarantia" value="<?php echo $result->refGarantia ?>" />
-                                            <input id="garantias_id" class="span12" type="hidden" name="garantias_id" value="<?php echo $result->garantias_id ?>" />
-                                        </div>
-                                    </div>
-                                    <div class="span6" style="padding: 1%; margin-left: 0">
+                                <form action="<?php echo current_url(); ?>" method="post" id="formAquisicao" class="form-horizontal">
+                                <div class="control-group">
+                                <label for="tipo_aquisicao" class="control-label">Tipo<span class="required">*</span></label>
+                                <div class="controls">
+                                    <select id="tipo_aquisicao" name="tipo_aquisicao">
+                                    <?php foreach ($tipo_aquisicoes as $tipo) : ?>
+                                        <option value="<?php echo $tipo['idTipoAquisicao']; ?>" <?= $tipo['idTipoAquisicao'] === $result->idTipoAquisicao ? 'selected' : '' ?>>
+                                            <?php echo $tipo['tipoAquisicao']; ?>
+                                        </option>
+                                    <?php endforeach ?>
+                                    </select>
+                                </div>
+                        </div>	
+                        <div class="control-group">
+                            <label for="marca" class="control-label">Marca<span class="required">*</span></label>
+                            <div class="controls">
+                            <select id="tipo_aquisicao" name="tipo_aquisicao">
+                                <?php foreach ($marcas as $marca) : ?>
+                                    <option value="<?php echo $marca['idMarca']; ?>" <?= $marca['idMarca'] === $result->idMarca ? 'selected' : '' ?>>
+                                    <?php echo $marca['marca']; ?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="modelo" class="control-label">Modelo<span class="required">*</span></label>
+                        <div class="controls">
+                            <input id="modelo" class="span6" type="text" name="modelo" value="<?php echo $result->modelo ?>" />
+                            <input id="idModelo" class="span12" type="hidden" name="idModelo" value="<?php echo $result->idModelo ?>" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="dataAquisicao" class="control-label">Data Aquisição<span class="required">*</span></label>
+                        <div class="controls">
+                        <input id="dataAquisicao" autocomplete="off" class="span2 datepicker" type="text" name="dataAquisicao" value="<?php echo date('d/m/Y', strtotime($result->dataAquisicao)); ?>" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="precoCompra" class="control-label">Preço de Compra<span class="required">*</span></label>
+                        <div class="controls">
+                            <input style="width: 9em;" id="precoCompra" class="money" data-affixes-stay="true" data-thousands="" data-decimal="." type="text" name="precoCompra" value="<?php echo $result->precoCompra; ?>" />
+                        </div>
+                    </div>
+                    <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="descricaoProduto">
-                                            <h4>Descrição Produto/Serviço</h4>
+                                            <h4>Descrição Produto</h4>
                                         </label>
                                         <textarea class="span12 editor" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5"><?php echo $result->descricaoProduto ?></textarea>
                                     </div>
@@ -168,19 +116,14 @@
                                         </label>
                                         <textarea class="span12 editor" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5"><?php echo $result->laudoTecnico ?></textarea>
                                     </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span6 offset3" style="text-align: center">
-                                            <?php if ($result->faturado == 0) { ?>
-                                                <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="btn btn-danger"><i class="fas fa-cash-register"></i> Faturar</a>
-                                            <?php
-                                            } ?>
-                                            <button class="btn btn-primary" id="btnContinuar"><i class="fas fa-sync-alt"></i> Atualizar
-                                            </button>
-                                            <?php if ($result->garantias_id) { ?> <a target="_blank" title="Imprimir Termo de Garantia" class="btn btn-inverse" href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->garantias_id; ?>"><i class="fas fa-text-width"></i> Imprimir Termo de
-                                                    Garantia</a> <?php } ?>
-                                            <a href="<?php echo base_url() ?>index.php/os" class="btn"><i class="fas fa-backward"></i> Voltar</a>
-                                        </div>
-                                    </div>
+                    <div class="form-actions">
+                        <div class="span12">
+                            <div style="text-align: center">
+                                <button type="submit" class="btn btn-success" id="btnContinuar"><i class="fas fa-plus"></i> Continuar</button>
+                                <a href="<?php echo base_url() ?>index.php/aquisicoes" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
+                            </div>
+                        </div>      
+                    </div>
                                 </form>
                             </div>
                         </div>
@@ -190,7 +133,7 @@
                                 <form id="formProdutos" action="<?php echo base_url() ?>index.php/os/adicionarProduto" method="post">
                                     <div class="span6">
                                         <input type="hidden" name="idProduto" id="idProduto" />
-                                        <input type="hidden" name="idOsProduto" id="idOsProduto" value="<?php echo $result->idOs; ?>" />
+                                        <input type="hidden" name="idAquisicaoProduto" id="idAquisicaoProduto" value="<?php echo $result->idAquisicao; ?>" />
                                         <input type="hidden" name="estoque" id="estoque" value="" />
                                         <label for="">Produto</label>
                                         <input type="text" class="span12" name="produto" id="produto" placeholder="Digite o nome do produto" />
@@ -255,7 +198,7 @@
                                 <form id="formServicos" action="<?php echo base_url() ?>index.php/os/adicionarServico" method="post">
                                     <div class="span6">
                                         <input type="hidden" name="idServico" id="idServico" />
-                                        <input type="hidden" name="idOsServico" id="idOsServico" value="<?php echo $result->idOs; ?>" />
+                                        <input type="hidden" name="idAquisicaoServico" id="idAquisicaoServico" value="<?php echo $result->idAquisicao; ?>" />
                                         <label for="">Serviço</label>
                                         <input type="text" class="span12" name="servico" id="servico" placeholder="Digite o nome do serviço" />
                                     </div>
@@ -320,7 +263,7 @@
                                 <div class="span12 well" style="padding: 1%; margin-left: 0" id="form-anexos">
                                     <form id="formAnexos" enctype="multipart/form-data" action="javascript:;" accept-charset="utf-8" s method="post">
                                         <div class="span10">
-                                            <input type="hidden" name="idOsServico" id="idOsServico" value="<?php echo $result->idOs; ?>" />
+                                            <input type="hidden" name="idAquisicaoServico" id="idAquisicaoServico" value="<?php echo $result->idAquisicao; ?>" />
                                             <label for="">Anexo</label>
                                             <input type="file" class="span12" name="userfile[]" multiple="multiple" size="20" />
                                         </div>
@@ -431,7 +374,7 @@
             <div class="span12" style="margin-left: 0">
                 <label for="anotacao">Anotação</label>
                 <textarea class="span12" name="anotacao" id="anotacao" cols="30" rows="3"></textarea>
-                <input type="hidden" name="os_id" value="<?php echo $result->idOs; ?>">
+                <input type="hidden" name="os_id" value="<?php echo $result->idAquisicao; ?>">
             </div>
         </div>
         <div class="modal-footer">
@@ -452,15 +395,7 @@
             <div class="span12 alert alert-info" style="margin-left: 0"> Obrigatório o preenchimento dos campos com asterisco.</div>
             <div class="span12" style="margin-left: 0">
                 <label for="descricao">Descrição</label>
-                <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de OS Nº: <?php echo $result->idOs; ?> " />
-            </div>
-            <div class="span12" style="margin-left: 0">
-                <div class="span12" style="margin-left: 0">
-                    <label for="cliente">Cliente*</label>
-                    <input class="span12" id="cliente" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>" />
-                    <input type="hidden" name="clientes_id" id="clientes_id" value="<?php echo $result->clientes_id ?>">
-                    <input type="hidden" name="os_id" id="os_id" value="<?php echo $result->idOs; ?>">
-                </div>
+                <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de OS Nº: <?php echo $result->idAquisicao; ?> " />
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span5" style="margin-left: 0">
@@ -531,7 +466,15 @@
     $(document).ready(function() {
 
         $(".money").maskMoney();
-
+        
+        $("#modelo").autocomplete({
+            source: "<?php echo base_url(); ?>index.php/aquisicoes/autoCompleteModelo",
+            minLength: 1,
+            select: function(event, ui) {
+                $("#idModelo").val(ui.item.id);
+            }
+        });
+        
         $('#recebido').click(function(event) {
             var flag = $(this).is(':checked');
             if (flag == true) {
@@ -941,13 +884,13 @@
             var idProduto = $(this).attr('idAcao');
             var quantidade = $(this).attr('quantAcao');
             var produto = $(this).attr('prodAcao');
-            var idOS = "<?php echo $result->idOs ?>"
+            var idOS = "<?php echo $result->idAquisicao ?>"
             if ((idProduto % 1) == 0) {
                 $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                     type: "POST",
                     url: "<?php echo base_url(); ?>index.php/os/excluirProduto",
-                    data: "idProduto=" + idProduto + "&quantidade=" + quantidade + "&produto=" + produto + "&idOs=" + idOS,
+                    data: "idProduto=" + idProduto + "&quantidade=" + quantidade + "&produto=" + produto + "&idAquisicao=" + idOS,
                     dataType: 'json',
                     success: function(data) {
                         if (data.result == true) {
@@ -969,13 +912,13 @@
 
         $(document).on('click', '.servico', function(event) {
             var idServico = $(this).attr('idAcao');
-            var idOS = "<?php echo $result->idOs ?>"
+            var idOS = "<?php echo $result->idAquisicao ?>"
             if ((idServico % 1) == 0) {
                 $("#divServicos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                     type: "POST",
                     url: "<?php echo base_url(); ?>index.php/os/excluirServico",
-                    data: "idServico=" + idServico + "&idOs=" + idOS,
+                    data: "idServico=" + idServico + "&idAquisicao=" + idOS,
                     data: "idServico=" + idServico,
                     dataType: 'json',
                     success: function(data) {
@@ -1010,7 +953,7 @@
         $(document).on('click', '#excluir-anexo', function(event) {
             event.preventDefault();
             var link = $(this).attr('link');
-            var idOS = "<?php echo $result->idOs ?>"
+            var idOS = "<?php echo $result->idAquisicao ?>"
             $('#modal-anexo').modal('hide');
             $("#divAnexos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
 
@@ -1018,7 +961,7 @@
                 type: "POST",
                 url: link,
                 dataType: 'json',
-                data: "idOs=" + idOS,
+                data: "idAquisicao=" + idOS,
                 success: function(data) {
                     if (data.result == true) {
                         $("#divAnexos").load("<?php echo current_url(); ?> #divAnexos");
@@ -1035,13 +978,13 @@
 
         $(document).on('click', '.anotacao', function(event) {
             var idAnotacao = $(this).attr('idAcao');
-            var idOS = "<?php echo $result->idOs ?>"
+            var idOS = "<?php echo $result->idAquisicao ?>"
             if ((idAnotacao % 1) == 0) {
                 $("#divAnotacoes").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                     type: "POST",
                     url: "<?php echo base_url(); ?>index.php/os/excluirAnotacao",
-                    data: "idAnotacao=" + idAnotacao + "&idOs=" + idOS,
+                    data: "idAnotacao=" + idAnotacao + "&idAquisicao=" + idOS,
                     dataType: 'json',
                     success: function(data) {
                         if (data.result == true) {

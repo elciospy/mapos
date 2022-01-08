@@ -1,4 +1,8 @@
-<?php if (!defined('BASEPATH')) {
+<?php
+
+use Mpdf\Tag\S;
+
+if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -18,6 +22,9 @@ class Aquisicoes extends MY_Controller
         $this->load->helper('form');
         $this->load->model('aquisicoes_model');
         $this->data['menuAquisicoes'] = 'Aquisicoes';
+        $this->data['tipo_aquisicoes'] = $this->aquisicoes_model->autoCompleteTipo();
+        $this->data['marcas'] = $this->aquisicoes_model->autoCompleteMarca();
+
     }
 
     public function index()
@@ -55,7 +62,7 @@ class Aquisicoes extends MY_Controller
 
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
-
+        
         if ($this->form_validation->run('aquisicoes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
@@ -68,10 +75,15 @@ class Aquisicoes extends MY_Controller
 
             $data = [
                 'idTipoAquisicao'   => set_value('tipo_aquisicao'),
-                'idMarca'  => set_value('marca'),
+                'idMarca'  => set_value('idMarca'),
                 'idModelo' => set_value('idModelo'),
                 'dataAquisicao' => $dataAquisicao,
-                'precoCompra' => $precoCompra
+                'precoCompra' => $precoCompra,
+                'descricaoProduto' => $this->input->post('descricaoProduto'),
+                'defeito' => $this->input->post('defeito'),
+                'idAquisicoesStatus' => 1,  /*Default quando a Aquisição é criada é ABERTA */
+                'observacoes' => $this->input->post('observacoes'),
+                'laudoTecnico' => $this->input->post('laudoTecnico'),
             ];
 
             if ($this->aquisicoes_model->add('aquisicoes', $data) == true) {
@@ -104,12 +116,11 @@ class Aquisicoes extends MY_Controller
 
         $this->data['editavel'] = $this->aquisicoes_model->isEditable($this->input->post('idOs'));
         if (!$this->data['editavel']) {
-            $this->session->set_flashdata('error', 'Esta OS já e seu status não pode ser alterado e nem suas informações atualizadas. Por favor abrir uma nova OS.');
-
-            redirect(site_url('os'));
+            $this->session->set_flashdata('error', 'Esta Aquisição já e seu status não pode ser alterado e nem suas informações atualizadas. Por favor abrir uma nova Aquisição.');
+            redirect(site_url('aquisicoes'));
         }
 
-        if ($this->form_validation->run('os') == false) {
+        if ($this->form_validation->run('aquisicoes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             $dataInicial = $this->input->post('dataInicial');
@@ -185,7 +196,6 @@ class Aquisicoes extends MY_Controller
         }
 
         $this->data['result'] = $this->aquisicoes_model->getById($this->uri->segment(3));
-
         $this->data['produtos'] = $this->aquisicoes_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->aquisicoes_model->getServicos($this->uri->segment(3));
         $this->data['anexos'] = $this->aquisicoes_model->getAnexos($this->uri->segment(3));
@@ -196,10 +206,10 @@ class Aquisicoes extends MY_Controller
             $this->data['totalProdutos'] = $return['totalProdutos'];
         }
 
-        $this->load->model('mapos_model');
-        $this->data['emitente'] = $this->mapos_model->getEmitente();
+//        $this->load->model('mapos_model');
+//        $this->data['emitente'] = $this->mapos_model->getEmitente();
 
-        $this->data['view'] = 'os/editarOs';
+        $this->data['view'] = 'aquisicoes/editarAquisicao';
         return $this->layout();
     }
 
@@ -286,6 +296,7 @@ class Aquisicoes extends MY_Controller
     public function autoCompleteTipo()
     {
         /*
+        
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);*/
             $this->aquisicoes_model->autoCompleteTipo();
