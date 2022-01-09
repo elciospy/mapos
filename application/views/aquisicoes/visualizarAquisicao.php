@@ -4,7 +4,7 @@
             <div class="widget-title">
                 <a data-parent="#collapse-group" href="#collapseGOne" data-toggle="collapse">
                     <span class="icon"><i class="fas fa-shopping-bag"></i></span>
-                    <h5>Dados do Produto</h5>
+                    <h5>Dados da Aquisição</h5>
                 </a>
             </div>
         </div>
@@ -13,21 +13,25 @@
                 <table class="table table-bordered">
                     <tbody>
                         <tr>
-                            <td style="text-align: right; width: 30%"><strong>Código de Barra</strong></td>
+                            <td style="text-align: right; width: 30%"><strong>ID</strong></td>
                             <td>
-                                <?php echo $result->codDeBarra ?>
+                                <?php echo $result->idAquisicao ?>
                             </td>
                         </tr>
                         <tr>
-                            <td style="text-align: right; width: 30%"><strong>Descrição</strong></td>
+                            <td style="text-align: right; width: 30%"><strong>Aquisição</strong></td>
                             <td>
-                                <?php echo $result->descricao ?>
+                                <?php
+                                    echo $dataAquisicao = date(('d/m/Y'), strtotime($result->dataAquisicao)); 
+                                ?>
                             </td>
                         </tr>
                         <tr>
-                            <td style="text-align: right"><strong>Unidade</strong></td>
+                            <td style="text-align: right"><strong>Data de Aquisição</strong></td>
                             <td>
-                                <?php echo $result->unidade ?>
+                                <?php
+                                    echo $dataAquisicao = date(('d/m/Y'), strtotime($result->dataAquisicao)); 
+                                ?>
                             </td>
                         </tr>
                         <tr>
@@ -37,25 +41,38 @@
                             </td>
                         </tr>
                         <tr>
-                            <td style="text-align: right"><strong>Preço de Venda</strong></td>
-                            <td>R$
-                                <?php echo $result->precoVenda; ?>
+                            <td style="text-align: right"><strong>Descricao</strong></td>
+                            <td>
+                                <?php echo $result->descricaoProduto; ?>
                             </td>
                         </tr>
                         <tr>
-                            <td style="text-align: right"><strong>Estoque</strong></td>
+                            <td style="text-align: right"><strong>Defeito</strong></td>
                             <td>
-                                <?php echo $result->estoque; ?>
+                                <?php echo $result->defeito; ?>
                             </td>
                         </tr>
                         <tr>
-                            <td style="text-align: right"><strong>Estoque Mínimo</strong></td>
+                            <td style="text-align: right"><strong>Observações</strong></td>
                             <td>
-                                <?php echo $result->estoqueMinimo; ?>
+                                <?php echo $result->observacoes; ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: right"><strong>Laudo Técnico</strong></td>
+                            <td>
+                                <?php echo $result->laudoTecnico; ?>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+                <div class="form-actions">
+                    <div class="span12">                                    
+                        <div style="text-align: center">
+                            <a href="<?php echo base_url() ?>index.php/aquisicoes" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
+                        </div>
+                    </div>      
+                </div>
             </div>
         </div>
     </div>

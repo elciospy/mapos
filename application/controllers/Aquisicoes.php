@@ -123,36 +123,31 @@ class Aquisicoes extends MY_Controller
         if ($this->form_validation->run('aquisicoes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $dataInicial = $this->input->post('dataInicial');
-            $dataFinal = $this->input->post('dataFinal');
-            $termoGarantiaId = $this->input->post('garantias_id') ?: null;
 
-            try {
-                $dataInicial = explode('/', $dataInicial);
-                $dataInicial = $dataInicial[2] . '-' . $dataInicial[1] . '-' . $dataInicial[0];
-
-                $dataFinal = explode('/', $dataFinal);
-                $dataFinal = $dataFinal[2] . '-' . $dataFinal[1] . '-' . $dataFinal[0];
-            } catch (Exception $e) {
-                $dataInicial = date('Y/m/d');
-            }
+            $precoCompra = $this->input->post('precoCompra');
+            $precoCompra = str_replace(",", "", $precoCompra);
+            $dataAquisicao = $this->input->post('dataAquisicao');
+            $dataAquisicao = explode('/', $dataAquisicao);
+            $dataAquisicao = $dataAquisicao[2] . '-' . $dataAquisicao[1] . '-' . $dataAquisicao[0];
 
             $data = [
-                'dataInicial' => $dataInicial,
-                'dataFinal' => $dataFinal,
-                'garantia' => $this->input->post('garantia'),
-                'garantias_id' => $termoGarantiaId,
+
+                'idTipoAquisicao'   => $this->input->post('tipo_aquisicao'),
+                'idMarca'  => $this->input->post('idMarca'),
+                'idModelo' => $this->input->post('idModelo'),
+                'dataAquisicao' => $dataAquisicao,
+                'precoCompra' => $precoCompra,
                 'descricaoProduto' => $this->input->post('descricaoProduto'),
                 'defeito' => $this->input->post('defeito'),
-                'status' => $this->input->post('status'),
+                'idAquisicoesStatus' => 1,  /*Default quando a Aquisição é criada é ABERTA */
                 'observacoes' => $this->input->post('observacoes'),
                 'laudoTecnico' => $this->input->post('laudoTecnico'),
-                'usuarios_id' => $this->input->post('usuarios_id'),
-                'clientes_id' => $this->input->post('clientes_id'),
             ];
-            $os = $this->aquisicoes_model->getById($this->input->post('idOs'));
 
-            if ($this->aquisicoes_model->edit('os', $data, 'idOs', $this->input->post('idOs')) == true) {
+            $aquisicao = $this->aquisicoes_model->getById($this->input->post('idAquisicao'));
+
+            if ($this->aquisicoes_model->edit('aquisicoes', $data, 'idAquisicao', $this->input->post('idAquisicao')) == true) {
+                /*
                 $this->load->model('mapos_model');
                 $this->load->model('usuarios_model');
 
@@ -186,10 +181,10 @@ class Aquisicoes extends MY_Controller
                     }
                     $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Editada');
                 }
-
-                $this->session->set_flashdata('success', 'Os editada com sucesso!');
-                log_info('Alterou uma OS. ID: ' . $this->input->post('idOs'));
-                redirect(site_url('os/editar/') . $this->input->post('idOs'));
+*/
+                $this->session->set_flashdata('success', 'Aquisição editada com sucesso!');
+                log_info('Alterou uma Aquisição. ID: ' . $this->input->post('idAquisicao'));
+                redirect(site_url('aquisicoes/editar/') . $this->input->post('idAquisicao'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
             }

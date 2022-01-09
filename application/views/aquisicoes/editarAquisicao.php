@@ -53,6 +53,7 @@
                                 <div class="control-group">
                                 <label for="tipo_aquisicao" class="control-label">Tipo<span class="required">*</span></label>
                                 <div class="controls">
+                                    <input type="hidden" name="idAquisicao" id="idAquisicao" value="<?php echo $result->idAquisicao; ?>">
                                     <select id="tipo_aquisicao" name="tipo_aquisicao">
                                     <?php foreach ($tipo_aquisicoes as $tipo) : ?>
                                         <option value="<?php echo $tipo['idTipoAquisicao']; ?>" <?= $tipo['idTipoAquisicao'] === $result->idTipoAquisicao ? 'selected' : '' ?>>
@@ -65,7 +66,7 @@
                         <div class="control-group">
                             <label for="marca" class="control-label">Marca<span class="required">*</span></label>
                             <div class="controls">
-                            <select id="tipo_aquisicao" name="tipo_aquisicao">
+                            <select id="idMarca" name="idMarca">
                                 <?php foreach ($marcas as $marca) : ?>
                                     <option value="<?php echo $marca['idMarca']; ?>" <?= $marca['idMarca'] === $result->idMarca ? 'selected' : '' ?>>
                                     <?php echo $marca['marca']; ?></option>
@@ -116,14 +117,14 @@
                                         </label>
                                         <textarea class="span12 editor" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5"><?php echo $result->laudoTecnico ?></textarea>
                                     </div>
-                    <div class="form-actions">
-                        <div class="span12">
-                            <div style="text-align: center">
-                                <button type="submit" class="btn btn-success" id="btnContinuar"><i class="fas fa-plus"></i> Continuar</button>
-                                <a href="<?php echo base_url() ?>index.php/aquisicoes" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
-                            </div>
-                        </div>      
-                    </div>
+                                    <div class="form-actions">
+                                        <div class="span12">                                    
+                                            <div style="text-align: center">
+                                                <button type="submit" class="btn btn-primary" id="btnContinuar"><i class="fas fa-sync-alt"></i> Atualizar</button>
+                                                <a href="<?php echo base_url() ?>index.php/aquisicoes" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
+                                            </div>
+                                        </div>      
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -133,7 +134,7 @@
                                 <form id="formProdutos" action="<?php echo base_url() ?>index.php/os/adicionarProduto" method="post">
                                     <div class="span6">
                                         <input type="hidden" name="idProduto" id="idProduto" />
-                                        <input type="hidden" name="idAquisicaoProduto" id="idAquisicaoProduto" value="<?php echo $result->idAquisicao; ?>" />
+                                        <input type="text" name="idAquisicaoProduto" id="idAquisicaoProduto" value="<?php echo $result->idAquisicao; ?>" />
                                         <input type="hidden" name="estoque" id="estoque" value="" />
                                         <label for="">Produto</label>
                                         <input type="text" class="span12" name="produto" id="produto" placeholder="Digite o nome do produto" />
