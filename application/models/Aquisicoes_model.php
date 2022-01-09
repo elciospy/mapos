@@ -41,8 +41,15 @@ class Aquisicoes_model extends CI_Model
 
     public function getById($id)
     {
-        $this->db->select('*, modelos.modelo');
+        $this->db->select(
+            '*' . 
+            ',tipo_aquisicao.tipoAquisicao'.
+            ',marcas.marca'.
+            ',modelos.modelo'
+        );
+        $this->db->join('tipo_aquisicao', 'tipo_aquisicao.idTipoAquisicao = aquisicoes.idTipoAquisicao');
         $this->db->join('modelos', 'modelos.idModelo = aquisicoes.idModelo');
+        $this->db->join('marcas', 'marcas.idMarca = aquisicoes.idMarca');
         $this->db->where('idAquisicao', $id);
         $this->db->limit(1);
         return $this->db->get('aquisicoes')->row();

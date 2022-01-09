@@ -182,7 +182,7 @@ class Aquisicoes extends MY_Controller
                     $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Editada');
                 }
 */
-                $this->session->set_flashdata('success', 'Aquisição editada com sucesso!');
+                $this->session->set_flashdata('success', 'Aquisição atualizada com sucesso!');
                 log_info('Alterou uma Aquisição. ID: ' . $this->input->post('idAquisicao'));
                 redirect(site_url('aquisicoes/editar/') . $this->input->post('idAquisicao'));
             } else {
@@ -238,14 +238,15 @@ class Aquisicoes extends MY_Controller
             redirect(base_url());
         }
 
-        $id = $this->input->post('id');
+        $id = $this->input->post('idAquisicao');
+        
         if ($id == null) {
             $this->session->set_flashdata('error', 'Erro ao tentar excluir aquisição.');
             redirect(base_url() . 'index.php/aquisicoes/gerenciar/');
         }
 
-        $this->aquisicoes_model->delete('aquisicoes_os', 'aquisicoes_id', $id);
-        $this->aquisicoes_model->delete('itens_de_vendas', 'aquisicoes_id', $id);
+        //$this->aquisicoes_model->delete('aquisicoes_os', 'aquisicoes_id', $id);
+        //$this->aquisicoes_model->delete('itens_de_vendas', 'aquisicoes_id', $id);
         $this->aquisicoes_model->delete('aquisicoes', 'idAquisicao', $id);
 
         log_info('Removeu um aquisição. ID: ' . $id);

@@ -8,7 +8,7 @@
         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vAquisicao')) { ?>
             <li class="<?php if (isset($menuAquisicoes)) {
             echo 'active';
-        }; ?>"><a href="<?= site_url('aquisicoes') ?>"><i class="fas fa-users"></i> <span>Aquisições</span></a></li>
+        }; ?>"><a href="<?= site_url('aquisicoes') ?>"><i class="fas fa-laptop"></i> <span>Aquisições</span></a></li>
             <?php
         } ?>
 

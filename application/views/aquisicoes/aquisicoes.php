@@ -45,13 +45,13 @@
                 echo '<td>' . number_format($r->precoCompra, 2, ',', '.') . '</td>';
                 echo '<td>';
                 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vAquisicao')) {
-                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/aquisicoes/visualizar/' . $r->idAquisicao . '" class="btn tip-top" title="Visualizar Produto"><i class="fas fa-eye"></i></a>  ';
+                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/aquisicoes/visualizar/' . $r->idAquisicao . '" class="btn tip-top" title="Visualizar Aquisição"><i class="fas fa-eye"></i></a>  ';
                 }
                 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eAquisicao')) {
-                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/aquisicoes/editar/' . $r->idAquisicao . '" class="btn btn-info tip-top" title="Editar Produto"><i class="fas fa-edit"></i></a>';
+                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/aquisicoes/editar/' . $r->idAquisicao . '" class="btn btn-info tip-top" title="Editar Aquisição"><i class="fas fa-edit"></i></a>';
                 }
                 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dAquisicao')) {
-                    echo '<a style="margin-right: 1%" href="#modal-excluir" role="button" data-toggle="modal" produto="' . $r->idAquisicao . '" class="btn btn-danger tip-top" title="Excluir Produto"><i class="fas fa-trash-alt"></i></a>';
+                    echo '<a style="margin-right: 1%" href="#modal-excluir" role="button" data-toggle="modal" idAquisicao="' . $r->idAquisicao . '" class="btn btn-danger tip-top delete" title="Excluir Aquisição"><i class="fas fa-trash-alt"></i></a>';
                 }
                 /*
                 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eAquisicao')) {
@@ -68,14 +68,14 @@
 
 <!-- Modal -->
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/produtos/excluir" method="post">
+    <form action="<?php echo base_url() ?>index.php/aquisicoes/excluir" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel"><i class="fas fa-trash-alt"></i> Excluir Produto</h5>
         </div>
         <div class="modal-body">
-            <input type="hidden" id="idProduto" class="idProduto" name="id" value=""/>
-            <h5 style="text-align: center">Deseja realmente excluir este produto?</h5>
+            <input type="hidden" id="idAquisicao" value="" name="idAquisicao"/>
+            <h5 style="text-align: center">Deseja realmente excluir esta aquisição?</h5>
         </div>
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
@@ -166,11 +166,9 @@
 <!-- Modal Etiquetas e Estoque-->
 <script type="text/javascript">
     $(document).ready(function () {
-        $(document).on('click', 'a', function (event) {
-            var produto = $(this).attr('produto');
-            var estoque = $(this).attr('estoque');
-            $('.idProduto').val(produto);
-            $('#estoqueAtual').val(estoque);
+        $(document).on('click', 'a.delete', function (event) {
+            var idAquisicao = $(this).attr('idAquisicao');
+            $('#idAquisicao').val(idAquisicao);
         });
 
         $('#formEstoque').validate({

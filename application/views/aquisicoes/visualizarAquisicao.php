@@ -15,14 +15,15 @@
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>ID</strong></td>
                             <td>
-                                <?php echo $result->idAquisicao ?>
+                                <?php 
+                                echo $result->idAquisicao ?>
                             </td>
                         </tr>
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Aquisição</strong></td>
                             <td>
                                 <?php
-                                    echo $dataAquisicao = date(('d/m/Y'), strtotime($result->dataAquisicao)); 
+                                    echo $result->tipoAquisicao . ' ' . $result->marca . ' '. $result->modelo; 
                                 ?>
                             </td>
                         </tr>
