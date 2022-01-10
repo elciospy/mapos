@@ -34,7 +34,11 @@ class Aquisicoes_model extends CI_Model
         }
       
         $query = $this->db->get();
-        
+        /*
+        print_r('<br/><br/><br/>');    
+        print_r($this->db->last_query());
+        exit;
+        */
         $result =  !$one  ? $query->result() : $query->row();
         return $result;
     }
