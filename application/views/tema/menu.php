@@ -12,6 +12,13 @@
             <?php
         } ?>
 
+        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vAquisicao')) { ?>
+            <li class="<?php if (isset($menuCompras)) {
+            echo 'active';
+        }; ?>"><a href="<?= site_url('compras') ?>"><i class="fas fa-shopping-cart"></i></i> <span>Compras</span></a></li>
+            <?php
+        } ?>
+
         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) { ?>
             <li class="<?php if (isset($menuClientes)) {
             echo 'active';

@@ -6,7 +6,7 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
-class Aquisicoes extends MY_Controller
+class compras extends MY_Controller
 {
 
     /**
@@ -20,10 +20,10 @@ class Aquisicoes extends MY_Controller
         parent::__construct();
 
         $this->load->helper('form');
-        $this->load->model('aquisicoes_model');
-        $this->data['menuAquisicoes'] = 'Aquisicoes';
-        $this->data['tipo_aquisicoes'] = $this->aquisicoes_model->autoCompleteTipo();
-        $this->data['marcas'] = $this->aquisicoes_model->autoCompleteMarca();
+        $this->load->model('compras_model');
+        $this->data['menucompras'] = 'Compras';
+        $this->data['tipo_compras'] = $this->compras_model->autoCompleteTipo();
+        $this->data['marcas'] = $this->compras_model->autoCompleteMarca();
 
     }
 
@@ -35,20 +35,20 @@ class Aquisicoes extends MY_Controller
     public function gerenciar()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vAquisicao')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar aquisicoes.');
+            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar compras.');
             redirect(base_url());
         }
 
         $this->load->library('pagination');
 
-        $this->data['configuration']['base_url'] = site_url('aquisicoes/gerenciar/');
-        $this->data['configuration']['total_rows'] = $this->aquisicoes_model->count('aquisicoes');
+        $this->data['configuration']['base_url'] = site_url('compras/gerenciar/');
+        $this->data['configuration']['total_rows'] = $this->compras_model->count('compras');
 
         $this->pagination->initialize($this->data['configuration']);
 
-        $this->data['results'] = $this->aquisicoes_model->get('aquisicoes', '*', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
+        $this->data['results'] = $this->compras_model->get('compras', '*', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
     
-        $this->data['view'] = 'aquisicoes/aquisicoes';
+        $this->data['view'] = 'compras/compras';
         return $this->layout();
         
     }
@@ -56,14 +56,14 @@ class Aquisicoes extends MY_Controller
     public function adicionar()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aAquisicao')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para adicionar aquisicoes.');
+            $this->session->set_flashdata('error', 'Você não tem permissão para adicionar compras.');
             redirect(base_url());
         }
 
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
         
-        if ($this->form_validation->run('aquisicoes') == false) {
+        if ($this->form_validation->run('compras') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
 
@@ -81,20 +81,20 @@ class Aquisicoes extends MY_Controller
                 'precoCompra' => $precoCompra,
                 'descricaoProduto' => $this->input->post('descricaoProduto'),
                 'defeito' => $this->input->post('defeito'),
-                'idAquisicoesStatus' => 1,  /*Default quando a Aquisição é criada é ABERTA */
+                'idcomprasStatus' => 1,  /*Default quando a Aquisição é criada é ABERTA */
                 'observacoes' => $this->input->post('observacoes'),
                 'laudoTecnico' => $this->input->post('laudoTecnico'),
             ];
 
-            if ($this->aquisicoes_model->add('aquisicoes', $data) == true) {
+            if ($this->compras_model->add('compras', $data) == true) {
                 $this->session->set_flashdata('success', 'Aquisição adicionada com sucesso!');
                 log_info('Adicionou uma aquisição');
-                redirect(site_url('aquisicoes/adicionar/'));
+                redirect(site_url('compras/adicionar/'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>An Error Occured.</p></div>';
             }
         }
-        $this->data['view'] = 'aquisicoes/adicionarAquisicao';
+        $this->data['view'] = 'compras/adicionarAquisicao';
         return $this->layout();
     }
 
@@ -114,13 +114,13 @@ class Aquisicoes extends MY_Controller
         $this->data['custom_error'] = '';
         $this->data['texto_de_notificacao'] = $this->data['configuration']['notifica_whats'];
 
-        $this->data['editavel'] = $this->aquisicoes_model->isEditable($this->input->post('idOs'));
+        $this->data['editavel'] = $this->compras_model->isEditable($this->input->post('idOs'));
         if (!$this->data['editavel']) {
             $this->session->set_flashdata('error', 'Esta Aquisição já e seu status não pode ser alterado e nem suas informações atualizadas. Por favor abrir uma nova Aquisição.');
-            redirect(site_url('aquisicoes'));
+            redirect(site_url('compras'));
         }
 
-        if ($this->form_validation->run('aquisicoes') == false) {
+        if ($this->form_validation->run('compras') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
 
@@ -139,21 +139,21 @@ class Aquisicoes extends MY_Controller
                 'precoCompra' => $precoCompra,
                 'descricaoProduto' => $this->input->post('descricaoProduto'),
                 'defeito' => $this->input->post('defeito'),
-                'idAquisicoesStatus' => 1,  /*Default quando a Aquisição é criada é ABERTA */
+                'idcomprasStatus' => 1,  /*Default quando a Aquisição é criada é ABERTA */
                 'observacoes' => $this->input->post('observacoes'),
                 'laudoTecnico' => $this->input->post('laudoTecnico'),
             ];
 
-            $aquisicao = $this->aquisicoes_model->getById($this->input->post('idAquisicao'));
+            $aquisicao = $this->compras_model->getById($this->input->post('idAquisicao'));
 
-            if ($this->aquisicoes_model->edit('aquisicoes', $data, 'idAquisicao', $this->input->post('idAquisicao')) == true) {
+            if ($this->compras_model->edit('compras', $data, 'idAquisicao', $this->input->post('idAquisicao')) == true) {
                 /*
                 $this->load->model('mapos_model');
                 $this->load->model('usuarios_model');
 
                 $idOs = $this->input->post('idOs');
 
-                $os = $this->aquisicoes_model->getById($idOs);
+                $os = $this->compras_model->getById($idOs);
                 $emitente = $this->mapos_model->getEmitente()[0];
                 $tecnico = $this->usuarios_model->getById($os->usuarios_id);
 
@@ -184,19 +184,19 @@ class Aquisicoes extends MY_Controller
 */
                 $this->session->set_flashdata('success', 'Aquisição editada com sucesso!');
                 log_info('Alterou uma Aquisição. ID: ' . $this->input->post('idAquisicao'));
-                redirect(site_url('aquisicoes/editar/') . $this->input->post('idAquisicao'));
+                redirect(site_url('compras/editar/') . $this->input->post('idAquisicao'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
             }
         }
 
-        $this->data['result'] = $this->aquisicoes_model->getById($this->uri->segment(3));
-        $this->data['produtos'] = $this->aquisicoes_model->getProdutos($this->uri->segment(3));
-        $this->data['servicos'] = $this->aquisicoes_model->getServicos($this->uri->segment(3));
-        $this->data['anexos'] = $this->aquisicoes_model->getAnexos($this->uri->segment(3));
-        $this->data['anotacoes'] = $this->aquisicoes_model->getAnotacoes($this->uri->segment(3));
+        $this->data['result'] = $this->compras_model->getById($this->uri->segment(3));
+        $this->data['produtos'] = $this->compras_model->getProdutos($this->uri->segment(3));
+        $this->data['servicos'] = $this->compras_model->getServicos($this->uri->segment(3));
+        $this->data['anexos'] = $this->compras_model->getAnexos($this->uri->segment(3));
+        $this->data['anotacoes'] = $this->compras_model->getAnotacoes($this->uri->segment(3));
 
-        if ($return = $this->aquisicoes_model->valorTotalOS($this->uri->segment(3))) {
+        if ($return = $this->compras_model->valorTotalOS($this->uri->segment(3))) {
             $this->data['totalServico'] = $return['totalServico'];
             $this->data['totalProdutos'] = $return['totalProdutos'];
         }
@@ -204,7 +204,7 @@ class Aquisicoes extends MY_Controller
 //        $this->load->model('mapos_model');
 //        $this->data['emitente'] = $this->mapos_model->getEmitente();
 
-        $this->data['view'] = 'aquisicoes/editarAquisicao';
+        $this->data['view'] = 'compras/editarAquisicao';
         return $this->layout();
     }
 
@@ -216,48 +216,48 @@ class Aquisicoes extends MY_Controller
         }
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vAquisicao')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar aquisicoes.');
+            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar compras.');
             redirect(base_url());
         }
 
-        $this->data['result'] = $this->aquisicoes_model->getById($this->uri->segment(3));
+        $this->data['result'] = $this->compras_model->getById($this->uri->segment(3));
 
         if ($this->data['result'] == null) {
             $this->session->set_flashdata('error', 'Aquisição não encontrada.');
-            redirect(site_url('aquisicoes/editar/') . $this->input->post('idAquisicao'));
+            redirect(site_url('compras/editar/') . $this->input->post('idAquisicao'));
         }
 
-        $this->data['view'] = 'aquisicoes/visualizarAquisicao';
+        $this->data['view'] = 'compras/visualizarAquisicao';
         return $this->layout();
     }
 
     public function excluir()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dAquisicao')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para excluir aquisicoes.');
+            $this->session->set_flashdata('error', 'Você não tem permissão para excluir compras.');
             redirect(base_url());
         }
 
         $id = $this->input->post('id');
         if ($id == null) {
             $this->session->set_flashdata('error', 'Erro ao tentar excluir aquisição.');
-            redirect(base_url() . 'index.php/aquisicoes/gerenciar/');
+            redirect(base_url() . 'index.php/compras/gerenciar/');
         }
 
-        $this->aquisicoes_model->delete('aquisicoes_os', 'aquisicoes_id', $id);
-        $this->aquisicoes_model->delete('itens_de_vendas', 'aquisicoes_id', $id);
-        $this->aquisicoes_model->delete('aquisicoes', 'idAquisicao', $id);
+        $this->compras_model->delete('compras_os', 'compras_id', $id);
+        $this->compras_model->delete('itens_de_vendas', 'compras_id', $id);
+        $this->compras_model->delete('compras', 'idAquisicao', $id);
 
         log_info('Removeu um aquisição. ID: ' . $id);
 
         $this->session->set_flashdata('success', 'Aquisição excluido com sucesso!');
-        redirect(site_url('aquisicoes/gerenciar/'));
+        redirect(site_url('compras/gerenciar/'));
     }
 
     public function atualizar_estoque()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eAquisicao')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para atualizar estoque de aquisicoes.');
+            $this->session->set_flashdata('error', 'Você não tem permissão para atualizar estoque de compras.');
             redirect(base_url());
         }
 
@@ -271,10 +271,10 @@ class Aquisicoes extends MY_Controller
             'estoque' => $estoque,
         ];
 
-        if ($this->aquisicoes_model->edit('aquisicoes', $data, 'idAquisicao', $idProduto) == true) {
+        if ($this->compras_model->edit('compras', $data, 'idAquisicao', $idProduto) == true) {
             $this->session->set_flashdata('success', 'Estoque de Produto atualizado com sucesso!');
             log_info('Atualizou estoque de uma aquisição. ID: ' . $idProduto);
-            redirect(site_url('aquisicoes/visualizar/') . $idProduto);
+            redirect(site_url('compras/visualizar/') . $idProduto);
         } else {
             $this->data['custom_error'] = '<div class="alert">Ocorreu um erro.</div>';
         }
@@ -284,7 +284,7 @@ class Aquisicoes extends MY_Controller
     {
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
-            $this->aquisicoes_model->autoCompleteModelo($q);
+            $this->compras_model->autoCompleteModelo($q);
         }
     }
 
@@ -294,7 +294,7 @@ class Aquisicoes extends MY_Controller
         
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);*/
-            $this->aquisicoes_model->autoCompleteTipo();
+            $this->compras_model->autoCompleteTipo();
         /* }*/
     }
     public function autoCompleteMarca()
@@ -302,7 +302,7 @@ class Aquisicoes extends MY_Controller
         /*
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);*/
-            $this->aquisicoes_model->autoCompleteMarca();
+            $this->compras_model->autoCompleteMarca();
         /* }*/
     }
 
@@ -311,13 +311,13 @@ class Aquisicoes extends MY_Controller
         $dados = [];
 
         $this->load->model('mapos_model');
-        $dados['result'] = $this->aquisicoes_model->getById($idOs);
+        $dados['result'] = $this->compras_model->getById($idOs);
         if (!isset($dados['result']->email)) {
             return false;
         }
 
-        $dados['produtos'] = $this->aquisicoes_model->getProdutos($idOs);
-        $dados['servicos'] = $this->aquisicoes_model->getServicos($idOs);
+        $dados['produtos'] = $this->compras_model->getProdutos($idOs);
+        $dados['servicos'] = $this->compras_model->getServicos($idOs);
         $dados['emitente'] = $this->mapos_model->getEmitente();
 
         $emitente = $dados['emitente'][0]->email;

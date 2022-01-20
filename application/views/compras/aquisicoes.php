@@ -1,5 +1,5 @@
 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aAquisicao')) { ?>
-    <a href="<?php echo base_url(); ?>index.php/compras/adicionar" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar Aquisição</a>
+    <a href="<?php echo base_url(); ?>index.php/aquisicoes/adicionar" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar Aquisição</a>
     
 
 <?php } ?>
@@ -45,10 +45,10 @@
                 echo '<td>' . number_format($r->precoCompra, 2, ',', '.') . '</td>';
                 echo '<td>';
                 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vAquisicao')) {
-                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/compras/visualizar/' . $r->idAquisicao . '" class="btn tip-top" title="Visualizar Aquisição"><i class="fas fa-eye"></i></a>  ';
+                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/aquisicoes/visualizar/' . $r->idAquisicao . '" class="btn tip-top" title="Visualizar Aquisição"><i class="fas fa-eye"></i></a>  ';
                 }
                 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eAquisicao')) {
-                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/compras/editar/' . $r->idAquisicao . '" class="btn btn-info tip-top" title="Editar Aquisição"><i class="fas fa-edit"></i></a>';
+                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/aquisicoes/editar/' . $r->idAquisicao . '" class="btn btn-info tip-top" title="Editar Aquisição"><i class="fas fa-edit"></i></a>';
                 }
                 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dAquisicao')) {
                     echo '<a style="margin-right: 1%" href="#modal-excluir" role="button" data-toggle="modal" idAquisicao="' . $r->idAquisicao . '" class="btn btn-danger tip-top delete" title="Excluir Aquisição"><i class="fas fa-trash-alt"></i></a>';
@@ -68,7 +68,7 @@
 
 <!-- Modal -->
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/compras/excluir" method="post">
+    <form action="<?php echo base_url() ?>index.php/aquisicoes/excluir" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel"><i class="fas fa-trash-alt"></i> Excluir Produto</h5>
